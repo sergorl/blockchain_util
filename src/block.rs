@@ -162,7 +162,6 @@ pub struct BlockContent {
     foo: u32, // for simplifying
 }
 
-
 /// A typical block
 #[derive(Clone, PartialEq, Eq, Debug)]
 pub struct Block {
@@ -199,7 +198,6 @@ pub fn hash_of_block(block: &Block) -> BlockHash {
 // Part 1.1: define a function to append a block to the blockchain
 // make sure that only valid blockchain are created
 //********************************************************************************
-
 fn block_append(blockchain: BlockChain, block: Block) -> Option<BlockChain> {
 
     let parent_hash = hash_of_block(&blockchain.block);
@@ -298,7 +296,6 @@ fn block_common_ancestor(blockchain: &[BlockChain]) -> Option<Block> {
 // it would be beneficial to be able to create cheap fork of the index to represent
 // fork of the blockchain.
 // ********************************************************************************
-
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -344,17 +341,11 @@ mod tests {
     use super::*;
     use std::vec::Vec;
 
-    /// Common test about creation blockchain
+    /// Common test about creation of blockchain
     #[test]
     fn test0() {
         let len = 4;
         let chain = BlockChain::new(len);
-
-        let mut i = 0;
-        for block in &chain {
-            //println!("{:?}", block);
-            i += 1;
-        }
 
         assert_eq!(chain.into_iter().fold(0, |acc, _| acc + 1), len);
         assert_eq!(
@@ -368,7 +359,7 @@ mod tests {
     /// Test about append new block to chain
     #[test]
     fn test1() {
-        let len = 1;
+        let len = 2;
         let chain = BlockChain::new(len);
 
         assert_eq!(block_append(chain,
@@ -379,7 +370,7 @@ mod tests {
     /// Test about looking up block by its hash (naive implementation)
     #[test]
     fn test2() {
-        let len: u32 = 3;
+        let len = 3;
         let chain = BlockChain::new(len);
 
         for block in &chain {
@@ -393,7 +384,6 @@ mod tests {
     /// Test about seeking common ancestor for a few versions of chains
     #[test]
     fn test3() {
-
         let len = 2;
         let chain = BlockChain::new(len);
         /* chain:
@@ -404,36 +394,33 @@ mod tests {
             .iter().map(|chain| chain.clone().extend()).collect::<Vec<BlockChain>>();
 
         /* chains: [block 1] is common ancestor
-                                             |<-- [block 2] <-- [block 3]
+                                             |<-- [block  2] <-- [block  3]
                   [block 0] <-- [block 1] <--|
-                                             |<-- [block 2] <-- [block 3]
+                                             |<-- [block' 2] <-- [block' 3]
         */
 
-        // test21: common ancestor is block with number 1 (second block in chain)
+        // test31: common ancestor is block with number 1 (second block in chain)
         let mut common: Option<Block> = block_common_ancestor(chains.as_slice());
-
         assert_eq!(common.unwrap().number, len-1);
 
         // =========================================================================================
-        // test22: no common ancestor
+        // test32: no common ancestor
         chains.push(BlockChain::new(2));
         /* chains:  no common ancestor
-                                             |<-- [block 2] <-- [block 3]
+                                             |<-- [block  2] <-- [block  3]
                   [block 0] <-- [block 1] <--|
-                                             |<-- [block 2] <-- [block 3]
+                                             |<-- [block' 2] <-- [block' 3]
 
                   [block' 0] <-- [block' 1]
         */
 
         common = block_common_ancestor(chains.as_slice());
-
         assert_eq!(common, None);
     }
 
     /// Test about checking existence of block inside chain
     #[test]
     fn test41() {
-
         let len = 3;
         let chain = BlockChain::new(len);
         let mut iter = chain.into_iter();
@@ -451,7 +438,6 @@ mod tests {
     /// Test about looking up block by hash inside chain with complexity ~O(1)
     #[test]
     fn test42() {
-
         let len = 3;
         let chain = BlockChain::new(len);
         let mut iter = chain.into_iter();

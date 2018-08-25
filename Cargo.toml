@@ -1,0 +1,12 @@
+[package]
+name = "task_blockchain"
+version = "0.1.0"
+authors = ["sergorl <serg.neworl@gmail.com>"]
+
+[lib]
+name = "blockchain"
+path = "src/lib.rs"
+
+
+[dependencies]
+

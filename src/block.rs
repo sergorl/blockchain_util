@@ -301,6 +301,8 @@ use std::collections::HashMap;
 #[derive(Debug)]
 struct Index {
     hashes: HashMap<BlockHash, Block>,
+    // but more efficient way is using the HashMap<BlockHash, &'a Block>
+    // with lifetime parameter in the context of Index
 }
 
 impl Index {
